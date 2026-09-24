@@ -3,7 +3,9 @@ echo "Running pre-push hook"
 
 # Build the app
 echo "🚀✨ Building the app before push... 🔨📦"
-if ! yarn build; then
+# Node 24 warns about url.parse() inside Next.js's own dependencies on every
+# worker; it is noise, not our code, so that one warning is hidden here.
+if ! NODE_OPTIONS="--disable-warning=DEP0169" yarn build; then
   echo "❌🚫 Build failed. 🔍 Please fix the errors before pushing. 🛠️"
   exit 1
 fi

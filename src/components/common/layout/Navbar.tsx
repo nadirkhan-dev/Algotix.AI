@@ -8,14 +8,18 @@ import { ArrowRight } from "lucide-react";
 import MeetingEmailForm from "../../meetingEmailForm";
 
 /**
- * At the top of the page the bar is a near-solid brand dark. Once the visitor
+ * At the top of the page the bar is transparent, so the dark hero every page
+ * opens with shows through behind the white logo and links. Once the visitor
  * scrolls it becomes light frosted glass: a translucent white with the page
  * blurred through it, a faint bottom line and a soft shadow. The logo, the
  * links and the phone menu switch to dark with it.
  */
-const BAR_BACKGROUND = "rgba(11, 11, 18, 0.9)";
+const BAR_BACKGROUND = "transparent";
 const GLASS_BACKGROUND = "rgba(255, 255, 255, 0.55)";
 const GLASS_BLUR = "blur(18px) saturate(180%)";
+/* The same filter at zero strength rather than "none", which browsers cannot
+   animate from, so the glass fades in with the colour instead of snapping. */
+const NO_BLUR = "blur(0px) saturate(100%)";
 const GLASS_SHADOW = "0 4px 30px rgba(0, 0, 0, 0.08)";
 const GLASS_BORDER = "1px solid rgba(255, 255, 255, 0.35)";
 /** How far the page must scroll before the glass state kicks in. */
@@ -121,11 +125,11 @@ const Navbar = () => {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-[100] py-4 transition-[background-color,box-shadow,border-color] duration-300 xl:py-5"
+      className="fixed top-0 left-0 right-0 z-[100] py-4 transition-[background-color,box-shadow,border-color,backdrop-filter,-webkit-backdrop-filter] duration-500 ease-out xl:py-5"
       style={{
         backgroundColor: scrolled ? GLASS_BACKGROUND : BAR_BACKGROUND,
-        backdropFilter: scrolled ? GLASS_BLUR : "none",
-        WebkitBackdropFilter: scrolled ? GLASS_BLUR : "none",
+        backdropFilter: scrolled ? GLASS_BLUR : NO_BLUR,
+        WebkitBackdropFilter: scrolled ? GLASS_BLUR : NO_BLUR,
         boxShadow: scrolled ? GLASS_SHADOW : "none",
         borderBottom: scrolled ? GLASS_BORDER : "1px solid transparent",
       }}

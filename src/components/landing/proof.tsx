@@ -1,24 +1,14 @@
-import {
-  Reveal,
-  RevealGroup,
-  RevealItem,
-} from "@/src/components/motion/reveal";
+import { Reveal } from "@/src/components/motion/reveal";
 import { stats } from "./data";
-
-/* Each tread sits below the one above, with a gap between them, and a little
-   under half a card further right, like a flight of steps. The
-   sizes are fractions of the column so the shape holds at every width. */
-const STAIR_STEPS = [
-  "tablet:w-[54%] tablet:ml-0",
-  "tablet:w-[54%] tablet:ml-[23%]",
-  "tablet:w-[54%] tablet:ml-[46%]",
-];
+import ReachMap from "./reach-map";
 
 export default function Proof() {
   return (
-    <section className="section-screen relative overflow-hidden border-t border-[#E4E4E8] bg-white py-20 tablet:py-28 laptop:py-16">
-      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
-        <div className="grid gap-14 laptop:grid-cols-2 laptop:items-center laptop:gap-20">
+    /* On laptop the map block takes the free height and centres in it, and
+       the stats row sits along the bottom. */
+    <section className="section-screen relative overflow-hidden border-t border-[#E4E4E8] bg-white py-20 tablet:py-28 laptop:grid-rows-[1fr_auto] laptop:content-stretch laptop:py-16">
+      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 sm:px-10 laptop:self-center xl:px-[60px]">
+        <div className="grid gap-14 laptop:grid-cols-[1fr_1.2fr] laptop:items-center laptop:gap-12">
           <Reveal direction="right" amount={0.2}>
             <p className="text-label uppercase text-primary">Global Reach</p>
             <h2 className="text-heading mt-5 text-[#14141D] laptop:text-display">
@@ -32,45 +22,38 @@ export default function Proof() {
             </p>
           </Reveal>
 
-          {/* The figures step down like a staircase, one card per tread. */}
-          <RevealGroup
-            className="flex flex-col gap-5 tablet:gap-6 laptop:gap-8"
-            stagger={0.17}
-            amount={0.2}
-          >
-            {stats.map((stat, i) => (
-              <RevealItem
-                key={stat.label}
-                direction="left"
-                distance={26}
-                className={STAIR_STEPS[i] ?? ""}
-              >
-                {/* A thin rim with an orange highlight that travels around it:
-                    a rotating conic gradient sits behind the card and only
-                    the 2px edge shows through. */}
-                <div className="relative w-full overflow-hidden rounded-2xl bg-[#E4E4E8] p-[2px] shadow-[0_30px_60px_-40px_rgba(11,11,18,0.35)]">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[220%] -translate-x-1/2 -translate-y-1/2"
-                  >
-                    <div className="h-full w-full animate-spin-border bg-[conic-gradient(from_0deg,transparent_0deg,transparent_250deg,rgba(254,90,1,0.35)_290deg,#FE5A01_330deg,transparent_360deg)] motion-reduce:animate-none" />
-                  </div>
-                  {/* Taller treads on laptop so the section stands as tall
-                      as the Case Studies section below it. */}
-                  <div className="relative rounded-[14px] bg-[#F6F6F7] px-6 py-8 text-center laptop:flex laptop:min-h-[236px] laptop:flex-col laptop:justify-center">
-                    <p className="text-heading text-primary laptop:text-display">
-                      {stat.value}
-                    </p>
-                    <p className="text-small mx-auto mt-3 max-w-[170px] text-[#6B6F76] laptop:max-w-[240px] laptop:text-body">
-                      {stat.label}
-                    </p>
-                  </div>
-                </div>
-              </RevealItem>
-            ))}
-          </RevealGroup>
+          {/* The dotted world map: lines draw out from Pakistan to the places
+              the work goes, with an orange pin at each end. */}
+          <Reveal direction="left" distance={40} amount={0.2}>
+            <div className="w-full xl:w-[104%] desktop:w-[115%]">
+              <ReachMap />
+            </div>
+          </Reveal>
         </div>
       </div>
+
+      {/* The figures in one still row along the bottom, where the logo chain
+          sits in Our Stack, split by thin rules. */}
+      <Reveal
+        amount={0.2}
+        className="mx-auto mt-14 w-full max-w-[1600px] px-6 sm:px-10 laptop:mt-10 xl:px-[60px]"
+      >
+        <dl className="grid grid-cols-3 border-t border-[#E4E4E8] pt-8">
+          {stats.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={
+                i > 0
+                  ? "border-l border-[#E4E4E8] pl-5 tablet:pl-10 laptop:pl-14"
+                  : "pr-5"
+              }
+            >
+              <dt className="text-heading text-primary">{stat.value}</dt>
+              <dd className="text-small mt-2 text-[#6B6F76]">{stat.label}</dd>
+            </div>
+          ))}
+        </dl>
+      </Reveal>
     </section>
   );
 }

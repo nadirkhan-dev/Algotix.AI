@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
      development it renders with the project's React instead of the copy
      bundled inside Next, and the two disagree. Bundling it keeps one React. */
   transpilePackages: ["next-mdx-remote"],
+  /* `next dev` writes to its own folder, so a production build (the pre-push
+     hook, or `yarn build`) never reads the dev server's half-written files.
+     Sharing `.next` made builds fail with "Cannot find module for page". */
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   pageExtensions: ["js", "jsx", "ts", "tsx", "mdx"],
   webpack(config) {
     config.resolve.fallback = {

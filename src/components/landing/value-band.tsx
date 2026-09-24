@@ -1,7 +1,40 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  CalendarDays,
+  CircleCheck,
+  Mail,
+  Phone,
+  type LucideIcon,
+} from "lucide-react";
 
-import { Reveal } from "@/src/components/motion/reveal";
+import {
+  Reveal,
+  RevealGroup,
+  RevealItem,
+} from "@/src/components/motion/reveal";
+import { contactData } from "@/src/containers/contact/data";
+
+/* The same email and phone as the contact page, so they never drift apart. */
+const email = contactData.find((c) => c.link.startsWith("mailto:"))!;
+const phone = contactData.find((c) => c.link.startsWith("tel:"))!;
+
+const channels: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  href: string;
+}[] = [
+  { icon: Mail, label: "Email us", value: email.title, href: email.link },
+  { icon: Phone, label: "Call us", value: phone.title, href: phone.link },
+  {
+    icon: CalendarDays,
+    label: "Book a meeting",
+    value: "Pick a time that suits you",
+    href: "/meeting-request",
+  },
+];
 
 export default function ValueBand() {
   return (
@@ -24,52 +57,62 @@ export default function ValueBand() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
-        <Reveal amount={0.2}>
-          <div className="flex rounded-[28px] border border-white/15 bg-white/[0.06] p-10 backdrop-blur-xl tablet:p-14 laptop:min-h-[520px] laptop:p-20 xl:min-h-[600px]">
-            <div className="flex w-full flex-col gap-10 laptop:flex-row laptop:items-center laptop:justify-between laptop:gap-16">
-              <Reveal
-                direction="right"
-                distance={32}
-                amount={0.2}
-                className="max-w-3xl"
-              >
-                <p className="text-label uppercase text-primary">
-                  Get In Touch
-                </p>
-                <h2 className="text-heading mt-4 text-white">
-                  Let&apos;s talk
-                </h2>
-                <p className="text-body mt-6 max-w-2xl text-white/65 laptop:text-subheading laptop:font-normal laptop:leading-relaxed">
-                  Tell us what you are trying to build. We will come back with a
-                  clear view of scope, approach, and what it takes to ship it.
-                </p>
-              </Reveal>
+        <div className="grid items-center gap-14 laptop:grid-cols-[1.1fr_1fr] laptop:gap-20">
+          <Reveal direction="right" distance={32} amount={0.2}>
+            <p className="text-label uppercase text-primary">Get In Touch</p>
+            <h2 className="text-heading mt-5 text-white laptop:text-display">
+              Let&apos;s build
+              <span className="block text-primary">what&apos;s next.</span>
+            </h2>
+            <p className="text-body mt-7 max-w-xl text-white/65 laptop:text-subheading laptop:font-normal laptop:leading-relaxed">
+              Tell us what you are trying to build. We will come back with a
+              clear view of scope, approach, and what it takes to ship it.
+            </p>
+            <Link
+              href="/contact"
+              className="text-label group mt-10 inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-full bg-primary px-8 py-4 uppercase text-white shadow-[0_16px_38px_-14px_rgba(254,89,1,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FF6A1A] laptop:px-10"
+            >
+              Contact us
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+            <p className="text-small mt-6 flex items-center gap-2 text-white/55">
+              <CircleCheck className="h-4 w-4 text-primary" strokeWidth={2} />
+              We reply to every message within one business day.
+            </p>
+          </Reveal>
 
-              <Reveal
-                direction="left"
-                distance={32}
-                delay={0.18}
-                amount={0.2}
-                className="flex shrink-0 flex-col gap-4 sm:flex-row laptop:flex-col"
-              >
-                <Link
-                  href="/contact"
-                  className="text-label group inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-full bg-primary px-8 py-4 uppercase text-white shadow-[0_16px_38px_-14px_rgba(254,89,1,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#FF6A1A] laptop:px-10"
-                >
-                  Contact us
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-                <Link
-                  href="/meeting-request"
-                  className="text-label group inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-full border border-white/30 px-8 py-4 uppercase text-white laptop:px-10 transition-colors duration-300 hover:border-primary hover:bg-primary"
-                >
-                  Book a meeting
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </Reveal>
-            </div>
-          </div>
-        </Reveal>
+          {/* The ways to reach us, one card each, stepping in from the right. */}
+          <RevealGroup
+            className="flex flex-col gap-4 tablet:gap-5"
+            stagger={0.14}
+            amount={0.2}
+          >
+            {channels.map((channel) => {
+              const Icon = channel.icon;
+              return (
+                <RevealItem key={channel.label} direction="left" distance={32}>
+                  <Link
+                    href={channel.href}
+                    className="group flex items-center gap-5 rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-white/[0.08] tablet:p-6"
+                  >
+                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
+                      <Icon className="h-6 w-6" strokeWidth={1.6} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="text-label block text-white/55">
+                        {channel.label}
+                      </span>
+                      <span className="text-subheading mt-1 block truncate text-white">
+                        {channel.value}
+                      </span>
+                    </span>
+                    <ArrowUpRight className="h-5 w-5 shrink-0 text-white/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+                  </Link>
+                </RevealItem>
+              );
+            })}
+          </RevealGroup>
+        </div>
       </div>
     </section>
   );
