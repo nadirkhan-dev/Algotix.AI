@@ -666,3 +666,19 @@ div[id] {
     transparent 65%
   );
 }
+
+/* Home page sections below the hero fill the screen under the fixed navbar
+   (68px tall, 76px from xl), with their content centred in that height.
+   Content taller than the screen still grows the section. */
+@media (min-width: 1024px) {
+  .section-screen {
+    display: grid;
+    align-content: center;
+    min-height: calc(100svh - 68px);
+  }
+}
+@media (min-width: 1280px) {
+  .section-screen {
+    min-height: calc(100svh - 76px);
+  }
+}

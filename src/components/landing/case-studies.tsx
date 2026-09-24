@@ -42,7 +42,7 @@ export default function CaseStudies() {
   }, [autoplay, active]);
 
   return (
-    <section className="bg-white py-20 tablet:py-28">
+    <section className="section-screen bg-white py-20 tablet:py-28 laptop:py-16">
       <div className="mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
         <Reveal className="text-center" amount={0.25}>
           <p className="text-label uppercase text-primary">Case Studies</p>
@@ -87,16 +87,18 @@ export default function CaseStudies() {
                       onClick={() => setActive(i)}
                       onMouseEnter={() => setActive(i)}
                       aria-pressed={isActive}
-                      className={`relative isolate flex w-full items-center gap-5 px-4 py-6 text-left transition-colors duration-300 tablet:gap-7 tablet:px-5 ${
+                      className={`group relative isolate flex w-full items-center gap-5 px-4 py-6 text-left transition-colors duration-300 tablet:gap-7 tablet:px-5 ${
                         isActive ? "" : "hover:bg-[#FAFAFB]"
                       }`}
                     >
                       {/* A single highlight shared by all rows, so it slides
-                          to the new selection instead of blinking across. */}
+                          to the new selection instead of blinking across. Its
+                          outline turns orange only under the pointer, not
+                          while the list rotates on its own. */}
                       {isActive && (
                         <motion.span
                           layoutId="case-study-row-highlight"
-                          className="absolute inset-0 -z-10 bg-[#F6F6F7] shadow-[inset_0_0_0_1px_#E4E4E8]"
+                          className="absolute inset-0 -z-10 bg-[#F6F6F7] ring-1 ring-inset ring-[#E4E4E8] transition-shadow duration-300 group-hover:ring-primary/40"
                           transition={{
                             type: "spring",
                             stiffness: 420,

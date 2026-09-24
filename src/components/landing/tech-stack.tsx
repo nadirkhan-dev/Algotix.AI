@@ -131,34 +131,177 @@ const KEEP_MONO_ON_HOVER = new Set([
 
 export default function TechStack() {
   return (
-    <section className="band-gradient relative overflow-hidden py-20 tablet:py-28">
+    <section className="section-screen band-gradient relative overflow-hidden py-20 tablet:py-28 laptop:py-16">
       <div className="mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
-        <Reveal className="text-center" amount={0.2}>
-          <p className="text-label uppercase text-primary">Our Stack</p>
-          <h2 className="text-heading mx-auto mt-4 max-w-3xl text-white">
-            Built on proven, production-grade technology
-          </h2>
-          <p className="text-body mx-auto mt-4 max-w-2xl text-white/60">
-            We pick tools for longevity, not novelty, so what we ship stays
-            maintainable long after launch.
-          </p>
-        </Reveal>
+        <div className="grid items-center gap-14 laptop:grid-cols-2 laptop:gap-20">
+          <Reveal direction="right" amount={0.2}>
+            <p className="text-label uppercase text-primary">Our Stack</p>
+            <h2 className="text-heading mt-5 text-white">
+              Built on proven,
+              <span className="block">production-grade tech</span>
+            </h2>
+            <p className="text-body mt-7 max-w-xl text-white/60 laptop:text-subheading laptop:font-normal laptop:leading-relaxed">
+              We pick tools for longevity, not novelty, so what we ship stays
+              maintainable long after launch.
+            </p>
+          </Reveal>
+
+          <StackNetwork />
+        </div>
       </div>
 
       {/* Two plain rows of wordmarks drifting in opposite directions. */}
       <RevealGroup
-        className="relative z-10 mt-24 w-full overflow-hidden tablet:mt-32"
+        className="relative z-10 mt-16 w-full overflow-hidden tablet:mt-20"
         amount={0.3}
         stagger={0.22}
       >
         <RevealItem direction="right" distance={48}>
           <LogoRow items={techLogosRowA} tone="dark" reverse />
         </RevealItem>
-        <RevealItem direction="left" distance={48} className="mt-10">
+        <RevealItem direction="left" distance={48} className="mt-6 laptop:mt-7">
           <LogoRow items={techLogosRowB} tone="dark" />
         </RevealItem>
       </RevealGroup>
     </section>
+  );
+}
+
+/* The network is drawn on a 640 x 600 canvas. Node positions are in those
+   units and become percentages, so the whole figure scales with its column. */
+const NET_W = 640;
+const NET_H = 600;
+const CORE = { x: 327, y: 315 };
+
+const NET_NODES: { name: string; x: number; y: number; small?: boolean }[] = [
+  { name: "Figma", x: 433, y: 50, small: true },
+  { name: "OpenAI", x: 300, y: 117 },
+  { name: "Next.js", x: 200, y: 143 },
+  { name: "Kubernetes", x: 510, y: 187 },
+  { name: "Python", x: 560, y: 281 },
+  { name: "AWS", x: 132, y: 335 },
+  { name: "PostgreSQL", x: 47, y: 352, small: true },
+  { name: "Node.js", x: 134, y: 443 },
+  { name: "React", x: 443, y: 475 },
+  { name: "Django", x: 356, y: 525 },
+  { name: "Tailwind CSS", x: 501, y: 533, small: true },
+];
+
+/** Nodes wired straight to the core. */
+const NET_SPOKES = [
+  "OpenAI",
+  "Next.js",
+  "Kubernetes",
+  "Python",
+  "AWS",
+  "Node.js",
+  "React",
+  "Django",
+];
+
+/** The web between the outer nodes. */
+const NET_LINKS: [string, string][] = [
+  ["Next.js", "OpenAI"],
+  ["OpenAI", "Figma"],
+  ["OpenAI", "Kubernetes"],
+  ["Next.js", "AWS"],
+  ["AWS", "Node.js"],
+  ["PostgreSQL", "Node.js"],
+  ["PostgreSQL", "Django"],
+  ["Node.js", "Django"],
+  ["Kubernetes", "Python"],
+  ["Kubernetes", "Tailwind CSS"],
+  ["Python", "React"],
+  ["React", "Django"],
+];
+
+/** The stack as a still network around a glowing core. */
+function StackNetwork() {
+  const at = (name: string) => NET_NODES.find((n) => n.name === name)!;
+
+  return (
+    <div className="relative mx-auto aspect-[640/600] w-full max-w-[680px]">
+      {/* The orange bloom behind the core. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute rounded-full bg-[radial-gradient(closest-side,rgba(254,89,1,0.55),rgba(254,89,1,0))] blur-xl"
+        style={{
+          left: `${((CORE.x - 210) / NET_W) * 100}%`,
+          top: `${((CORE.y - 210) / NET_H) * 100}%`,
+          width: `${(420 / NET_W) * 100}%`,
+          height: `${(420 / NET_H) * 100}%`,
+        }}
+      />
+
+      <svg
+        aria-hidden
+        viewBox={`0 0 ${NET_W} ${NET_H}`}
+        className="absolute inset-0 h-full w-full"
+      >
+        {NET_LINKS.map(([a, b]) => (
+          <line
+            key={`${a}-${b}`}
+            x1={at(a).x}
+            y1={at(a).y}
+            x2={at(b).x}
+            y2={at(b).y}
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth={1.5}
+          />
+        ))}
+        {NET_SPOKES.map((name) => (
+          <line
+            key={name}
+            x1={at(name).x}
+            y1={at(name).y}
+            x2={CORE.x}
+            y2={CORE.y}
+            stroke="rgba(255,255,255,0.14)"
+            strokeWidth={1.5}
+          />
+        ))}
+
+        {/* The core: a thin ring round a solid orange dot. */}
+        <circle
+          cx={CORE.x}
+          cy={CORE.y}
+          r={52}
+          fill="none"
+          stroke="rgba(254,89,1,0.55)"
+          strokeWidth={1.5}
+        />
+        <circle cx={CORE.x} cy={CORE.y} r={18} fill="#FE5A01" />
+        <circle cx={CORE.x} cy={CORE.y} r={6} fill="#FFFFFF" />
+      </svg>
+
+      <RevealGroup className="absolute inset-0" stagger={0.06} amount={0.2}>
+        {NET_NODES.map((node) => {
+          const { icon: Icon, color } = MONO_ICONS[node.name];
+          const size = node.small ? 58 : 72;
+          return (
+            <RevealItem
+              key={node.name}
+              direction="none"
+              className="absolute"
+              style={{
+                left: `${((node.x - size / 2) / NET_W) * 100}%`,
+                top: `${((node.y - size / 2) / NET_H) * 100}%`,
+                width: `${(size / NET_W) * 100}%`,
+              }}
+            >
+              <div
+                role="img"
+                aria-label={node.name}
+                className="flex aspect-square w-full items-center justify-center rounded-full border border-white/15 bg-[#17171F] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)]"
+              >
+                {/* Each mark in its brand colour (white for the black ones). */}
+                <Icon className="h-[42%] w-[42%]" style={{ color }} />
+              </div>
+            </RevealItem>
+          );
+        })}
+      </RevealGroup>
+    </div>
   );
 }
 
@@ -169,7 +312,7 @@ function LogoMark({ tech, dark }: { tech: TechLogo; dark: boolean }) {
     const Icon = mono.icon;
     const swap = !KEEP_MONO_ON_HOVER.has(tech.name);
     return (
-      <span className="relative block h-9 w-9 shrink-0 tablet:h-10 tablet:w-10">
+      <span className="relative block h-9 w-9 shrink-0 tablet:h-10 tablet:w-10 laptop:h-12 laptop:w-12">
         <Icon
           /* Dimmed white at rest. The hover stays pure CSS (a variable carries
              the colour), so this can remain a server component. */
@@ -242,7 +385,7 @@ export function LogoRow({
               >
                 <LogoMark tech={tech} dark={dark} />
                 <span
-                  className={`text-body whitespace-nowrap font-semibold ${dark ? " text-white/65 transition-colors duration-300 group-hover:text-white " : " text-[#6B6F76] "}`}
+                  className={`text-body whitespace-nowrap font-semibold ${dark ? " text-white/65 transition-colors duration-300 group-hover:text-white laptop:text-subheading " : " text-[#6B6F76] "}`}
                 >
                   {tech.name}
                 </span>

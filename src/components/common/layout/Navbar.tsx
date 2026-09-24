@@ -133,7 +133,13 @@ const Navbar = () => {
       <div className="mx-auto flex h-[30px] w-full max-w-[1600px] items-center justify-between px-6 sm:px-10 xl:px-[60px] md:h-[35px]">
         {/* Logo */}
         <div className="flex items-center">
-          <Link href="/" className="relative block h-[37px] w-[120px]">
+          <Link href="/" className="group relative block h-[37px] w-[120px]">
+            {/* On hover a soft orange bloom rises behind the logo, the same
+                glow as the dark bands. It sits first so it stays behind. */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -inset-x-10 -inset-y-6 bg-[radial-gradient(closest-side,rgba(254,89,1,0.7),rgba(254,89,1,0))] opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100"
+            />
             {/* White-lettered logo for the dark bar and the original dark
                 logo for the glass bar, cross-faded so the swap is smooth.
                 Both keep the orange dot over the "i". */}

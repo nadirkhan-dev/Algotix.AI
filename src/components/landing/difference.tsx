@@ -8,7 +8,7 @@ import Pattern from "./patterns";
 
 export default function Difference() {
   return (
-    <section className="band-gradient relative overflow-hidden border-t border-white/[0.06] py-20 tablet:py-28">
+    <section className="section-screen band-gradient relative overflow-hidden border-t border-white/[0.06] py-20 tablet:py-28 laptop:py-16">
       <div className="mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
         <Reveal className="text-center" amount={0.2}>
           <p className="text-label uppercase text-primary">Why Algotix AI</p>
@@ -30,7 +30,7 @@ export default function Difference() {
             const Icon = item.icon;
             return (
               <RevealItem key={item.title} className="h-full" distance={28}>
-                <article className="glow-card sheen isolate group relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-[#17171F] p-7 transition-all duration-400 hover:-translate-y-1.5 hover:border-white/15">
+                <article className="glow-card sheen isolate group relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-[#17171F] p-7 transition-all duration-400 hover:-translate-y-1.5 hover:border-primary/40">
                   <Pattern
                     kind={item.pattern}
                     color={item.accent}

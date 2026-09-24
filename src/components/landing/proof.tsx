@@ -5,27 +5,27 @@ import {
 } from "@/src/components/motion/reveal";
 import { stats } from "./data";
 
-/* Each tread sits below the one above, with a gap between them, and three
-   quarters of a card further right, like a flight of steps. The
+/* Each tread sits below the one above, with a gap between them, and a little
+   under half a card further right, like a flight of steps. The
    sizes are fractions of the column so the shape holds at every width. */
 const STAIR_STEPS = [
-  "tablet:w-[40%] tablet:ml-0",
-  "tablet:w-[40%] tablet:ml-[30%]",
-  "tablet:w-[40%] tablet:ml-[60%]",
+  "tablet:w-[54%] tablet:ml-0",
+  "tablet:w-[54%] tablet:ml-[23%]",
+  "tablet:w-[54%] tablet:ml-[46%]",
 ];
 
 export default function Proof() {
   return (
-    <section className="relative overflow-hidden border-t border-[#E4E4E8] bg-white py-20 tablet:py-28">
+    <section className="section-screen relative overflow-hidden border-t border-[#E4E4E8] bg-white py-20 tablet:py-28 laptop:py-16">
       <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
         <div className="grid gap-14 laptop:grid-cols-2 laptop:items-center laptop:gap-20">
           <Reveal direction="right" amount={0.2}>
             <p className="text-label uppercase text-primary">Global Reach</p>
-            <h2 className="text-heading mt-5 text-[#14141D]">
+            <h2 className="text-heading mt-5 text-[#14141D] laptop:text-display">
               Rooted in Pakistan.
               <span className="block text-primary">Delivering worldwide.</span>
             </h2>
-            <p className="text-body mt-7 max-w-xl text-[#6B6F76]">
+            <p className="text-body mt-7 max-w-xl text-[#6B6F76] laptop:text-subheading laptop:font-normal laptop:leading-relaxed">
               We partner with startups and enterprises across industries,
               pairing global engineering standards with the responsiveness of a
               close-knit team.
@@ -34,7 +34,7 @@ export default function Proof() {
 
           {/* The figures step down like a staircase, one card per tread. */}
           <RevealGroup
-            className="flex flex-col gap-5 tablet:gap-6"
+            className="flex flex-col gap-5 tablet:gap-6 laptop:gap-8"
             stagger={0.17}
             amount={0.2}
           >
@@ -55,9 +55,13 @@ export default function Proof() {
                   >
                     <div className="h-full w-full animate-spin-border bg-[conic-gradient(from_0deg,transparent_0deg,transparent_250deg,rgba(254,90,1,0.35)_290deg,#FE5A01_330deg,transparent_360deg)] motion-reduce:animate-none" />
                   </div>
-                  <div className="relative rounded-[14px] bg-[#F6F6F7] px-6 py-8 text-center">
-                    <p className="text-heading text-primary">{stat.value}</p>
-                    <p className="text-small mx-auto mt-3 max-w-[170px] text-[#6B6F76]">
+                  {/* Taller treads on laptop so the section stands as tall
+                      as the Case Studies section below it. */}
+                  <div className="relative rounded-[14px] bg-[#F6F6F7] px-6 py-8 text-center laptop:flex laptop:min-h-[236px] laptop:flex-col laptop:justify-center">
+                    <p className="text-heading text-primary laptop:text-display">
+                      {stat.value}
+                    </p>
+                    <p className="text-small mx-auto mt-3 max-w-[170px] text-[#6B6F76] laptop:max-w-[240px] laptop:text-body">
                       {stat.label}
                     </p>
                   </div>

@@ -5,7 +5,7 @@ import { Reveal } from "@/src/components/motion/reveal";
 
 export default function ValueBand() {
   return (
-    <section className="relative overflow-hidden bg-[#0B0B12] py-20 tablet:py-28">
+    <section className="section-screen relative overflow-hidden bg-[#0B0B12] py-20 tablet:py-28 laptop:py-16">
       {/* Layered blooms rather than a bitmap, so it stays crisp at any width. */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -25,7 +25,7 @@ export default function ValueBand() {
 
       <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 sm:px-10 xl:px-[60px]">
         <Reveal amount={0.2}>
-          <div className="flex rounded-[28px] border border-white/15 bg-white/[0.06] p-10 backdrop-blur-xl tablet:p-14 laptop:min-h-[380px] laptop:p-16">
+          <div className="flex rounded-[28px] border border-white/15 bg-white/[0.06] p-10 backdrop-blur-xl tablet:p-14 laptop:min-h-[520px] laptop:p-20 xl:min-h-[600px]">
             <div className="flex w-full flex-col gap-10 laptop:flex-row laptop:items-center laptop:justify-between laptop:gap-16">
               <Reveal
                 direction="right"
@@ -36,8 +36,10 @@ export default function ValueBand() {
                 <p className="text-label uppercase text-primary">
                   Get In Touch
                 </p>
-                <h2 className="text-heading text-white">Let&apos;s talk</h2>
-                <p className="text-body mt-6 max-w-2xl text-white/65">
+                <h2 className="text-heading mt-4 text-white">
+                  Let&apos;s talk
+                </h2>
+                <p className="text-body mt-6 max-w-2xl text-white/65 laptop:text-subheading laptop:font-normal laptop:leading-relaxed">
                   Tell us what you are trying to build. We will come back with a
                   clear view of scope, approach, and what it takes to ship it.
                 </p>
